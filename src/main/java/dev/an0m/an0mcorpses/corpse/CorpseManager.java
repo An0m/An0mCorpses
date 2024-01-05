@@ -1,6 +1,9 @@
 package dev.an0m.an0mcorpses.corpse;
 
 import dev.an0m.an0mcorpses.An0mCorpses;
+import dev.an0m.an0mcorpses.events.CorpseCreateEvent;
+import dev.an0m.an0mcorpses.events.CorpseRemoveEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -33,10 +36,19 @@ public class CorpseManager {
         Corpse corpse = corpses.get(id);
         if (corpse == null) return false;
 
+        // Run Event
+        CorpseRemoveEvent event = new CorpseRemoveEvent(corpse);
+        Bukkit.getPluginManager().callEvent(event);
+        if (corpse.npc == null) event.setCancelled(true);
+
+        // Remove the corpse
+        if (event.isCancelled()) return false;
         hitboxes.remove(corpse.getHitbox());
         corpse.getHitbox().remove(); // The npc keeps the chunk loaded
         corpse.despawn();
         corpses.remove(id);
+
+        // Close the guis
         new ArrayList<>(corpse.getInventory().getViewers()).forEach(HumanEntity::closeInventory); // This MUST be after corpses.remove, or else it will crash the server
         return true;
     }
@@ -45,13 +57,19 @@ public class CorpseManager {
     }
 
     /**
-     * Spawn the corpse of a player
+     * Create the corpse of a player (not spawned)
      * @return The corpse or null if unable to spawn (void)
      */
     public static Corpse create(Player sourcePlayer, EntityType hitboxEntity) {
         Corpse corpse = new Corpse(sourcePlayer, hitboxEntity);
-        if (corpse.npc == null) return null;
 
+        // Run Event
+        CorpseCreateEvent event = new CorpseCreateEvent(corpse);
+        Bukkit.getPluginManager().callEvent(event);
+        if (corpse.npc == null) event.setCancelled(true);
+
+        // Spawn the corpse
+        if (event.isCancelled()) return null;
         corpse.spawn();
         corpses.put(corpse.getId(), corpse);
         hitboxes.put(corpse.getHitbox(), corpse);
