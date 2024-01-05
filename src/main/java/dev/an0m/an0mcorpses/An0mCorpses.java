@@ -1,6 +1,6 @@
 package dev.an0m.an0mcorpses;
 
-import dev.an0m.an0mcorpses.commands.SpawnCmd;
+import dev.an0m.an0mcorpses.commands.CorpseCmd;
 import dev.an0m.an0mcorpses.corpse.CorpseManager;
 import dev.an0m.an0mcorpses.listeners.PlayerListener;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,7 +17,7 @@ public final class An0mCorpses extends JavaPlugin {
         saveDefaultConfig();
         config = getConfig();
 
-        getServer().getPluginCommand("corpse").setExecutor(new SpawnCmd());
+        getServer().getPluginCommand("corpse").setExecutor(new CorpseCmd());
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         // Add and remove the corpses for the nearby players (run every tick)

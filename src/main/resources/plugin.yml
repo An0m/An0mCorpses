@@ -10,6 +10,7 @@ description: A simple lootable corpses plugin
 commands:
   corpse:
     permission: corpse.admin
+    usage: "§cUsage: /<command> spawn|remove|clear|reload [•••]"
 
 permissions:
   corpse.admin:
