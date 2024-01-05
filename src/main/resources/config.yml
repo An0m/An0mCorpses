@@ -12,3 +12,8 @@ expSupport: true
 
 # Delete corpse if the inventory is empty
 removeIfEmpty: true
+
+# Don't spawn the corpse if it'll end up in fire or lava
+dontSpawnIn:
+  fire: false
+  lava: true

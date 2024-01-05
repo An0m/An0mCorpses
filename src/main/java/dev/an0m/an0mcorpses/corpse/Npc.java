@@ -34,8 +34,10 @@ public class Npc {
         Location loc = sourceLocation.clone();
         BoundingBox bb; Block block;
         for (;;) {
-            if (loc.getY() < -64 || (block = loc.getBlock()).getType() == Material.LAVA) {
-                npc = null; return;
+            if (loc.getY() < -64 || (((block = loc.getBlock()).getType() == Material.LAVA) && An0mCorpses.config.getBoolean("dontSpawnIn.lava")) ||
+                    (block.getType() == Material.FIRE || block.getType() == Material.SOUL_FIRE) && An0mCorpses.config.getBoolean("dontSpawnIn.fire")) {
+                npc = null;
+                return;
             }
             if (block.isPassable() || (bb = block.getBoundingBox()).getWidthX() < .5 || bb.getWidthZ() < .5)
                 loc.subtract(0, 1, 0);
