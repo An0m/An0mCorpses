@@ -1,0 +1,15 @@
+name: An0mCorpse
+version: '${project.version}'
+main: dev.an0m.an0mcorpse.An0mCorpse
+api-version: '1.16'
+load: STARTUP
+website: an0m.dev
+author: An0m
+
+commands:
+  corpse:
+    permission: corpse.admin
+
+permissions:
+  corpse.admin:
+    default: op
