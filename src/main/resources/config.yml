@@ -1,0 +1,7 @@
+# Timeout for a corpse to despawn
+corpseRemovalTimeout: 3600 # Ticks
+
+# Entity used for corpse hitbox
+hitboxEntity: turtle
+
+guiName: "{}&r's corpse"

@@ -26,13 +26,13 @@ public class Corpse extends Npc {
     private int holdenExp;
 
     /** Use CorpseManger.create(). Thanks! */
-    protected Corpse(Player sourcePlayer) {
+    protected Corpse(Player sourcePlayer, EntityType hitboxEntity) {
         super((CraftPlayer) sourcePlayer);
         this.sourcePlayer = sourcePlayer;
         this.ownerName = sourcePlayer.getName();
-
         // Create copy of player's inventory
-        inventory = Bukkit.createInventory(npc.getBukkitEntity(), 9 * 5, sourcePlayer.getDisplayName() + "§r's corpse"); // TODO: Move to config
+        inventory = Bukkit.createInventory(npc.getBukkitEntity(), 9 * 5,
+                An0mCorpse.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName()));
         inventory.setStorageContents(sourcePlayer.getInventory().getStorageContents());
 
         // Add armor and offhand
@@ -42,7 +42,7 @@ public class Corpse extends Npc {
             inventory.setItem(40 + c++, sourceInventory.getItem(es));
 
         // Spawn hitbox entity
-        hitbox = (Turtle) sourcePlayer.getWorld().spawnEntity(getLocation(), EntityType.TURTLE);
+        hitbox = (Turtle) sourcePlayer.getWorld().spawnEntity(getLocation(), hitboxEntity);
         hitbox.setAI(false);
         hitbox.setPersistent(true); // Despawned when removing
         Utils.makeInvulnerable(hitbox);
@@ -60,7 +60,7 @@ public class Corpse extends Npc {
         return Bukkit.getServer().getScheduler().runTaskLater(An0mCorpse.getInstance(), () -> CorpseManager.remove(getId()), ticks);
     }
     public BukkitTask scheduleRemoval() {
-        return scheduleRemoval(3 * 60 * 20); //TODO move to config
+        return scheduleRemoval(An0mCorpse.config.getInt("corpseRemovalTimeout"));
     }
 
     public Player getSourcePlayer() {

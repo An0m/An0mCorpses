@@ -1,6 +1,8 @@
 package dev.an0m.an0mcorpse.corpse;
 
+import dev.an0m.an0mcorpse.An0mCorpse;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
@@ -46,14 +48,21 @@ public class CorpseManager {
      * Spawn the corpse of a player
      * @return The corpse or null if unable to spawn (void)
      */
-    public static Corpse create(Player sourcePlayer) {
-        Corpse corpse = new Corpse(sourcePlayer);
+    public static Corpse create(Player sourcePlayer, EntityType hitboxEntity) {
+        Corpse corpse = new Corpse(sourcePlayer, hitboxEntity);
         if (corpse.npc == null) return null;
 
         corpse.spawn();
         corpses.put(corpse.getId(), corpse);
         hitboxes.put(corpse.getHitbox(), corpse);
         return corpse;
+    }
+    /**
+     * Spawn the corpse of a player
+     * @return The corpse or null if unable to spawn (void)
+     */
+    public static Corpse create(Player sourcePlayer) {
+        return create(sourcePlayer, EntityType.valueOf(An0mCorpse.config.getString("hitboxEntity").toUpperCase()));
     }
 
     /**

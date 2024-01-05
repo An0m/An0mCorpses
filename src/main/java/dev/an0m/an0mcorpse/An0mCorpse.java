@@ -5,15 +5,20 @@ import dev.an0m.an0mcorpse.corpse.Corpse;
 import dev.an0m.an0mcorpse.corpse.CorpseManager;
 import dev.an0m.an0mcorpse.listeners.PlayerListener;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class An0mCorpse extends JavaPlugin {
 
     private static An0mCorpse instance;
+    public static FileConfiguration config;
 
     @Override
     public void onEnable() {
         instance = this;
+        saveDefaultConfig();
+        config = getConfig();
+
         getServer().getPluginCommand("corpse").setExecutor(new SpawnCmd());
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
