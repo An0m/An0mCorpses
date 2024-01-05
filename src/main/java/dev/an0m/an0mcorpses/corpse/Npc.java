@@ -27,11 +27,11 @@ public class Npc {
     public final EntityPlayer npc;
     private Location location = null;
 
-    protected Npc(CraftPlayer sourcePlayer) {
+    protected Npc(CraftPlayer sourcePlayer, Location sourceLocation) {
         EntityPlayer playerHandle = sourcePlayer.getHandle();
 
         // Get ground position
-        Location loc = sourcePlayer.getLocation().clone();
+        Location loc = sourceLocation.clone();
         BoundingBox bb; Block block;
         for (;;) {
             if (loc.getY() < -64 || (block = loc.getBlock()).getType() == Material.LAVA) {

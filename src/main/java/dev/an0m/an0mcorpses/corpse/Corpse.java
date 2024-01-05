@@ -3,6 +3,7 @@ package dev.an0m.an0mcorpses.corpse;
 import dev.an0m.an0mcorpses.An0mCorpses;
 import dev.an0m.an0mcorpses.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -31,8 +32,8 @@ public class Corpse extends Npc {
     private int holdenExp;
 
     /** Use CorpseManger.create(). Thanks! */
-    protected Corpse(Player sourcePlayer, EntityType hitboxEntity) {
-        super((CraftPlayer) sourcePlayer);
+    protected Corpse(Player sourcePlayer, EntityType hitboxEntity, Location location) {
+        super((CraftPlayer) sourcePlayer, location);
         this.sourcePlayer = sourcePlayer;
         this.ownerName = sourcePlayer.getName();
 

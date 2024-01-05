@@ -4,6 +4,7 @@ import dev.an0m.an0mcorpses.An0mCorpses;
 import dev.an0m.an0mcorpses.events.CorpseCreateEvent;
 import dev.an0m.an0mcorpses.events.CorpseRemoveEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -60,8 +61,8 @@ public class CorpseManager {
      * Create the corpse of a player (not spawned)
      * @return The corpse or null if unable to spawn (void)
      */
-    public static Corpse create(Player sourcePlayer, EntityType hitboxEntity) {
-        Corpse corpse = new Corpse(sourcePlayer, hitboxEntity);
+    public static Corpse create(Player sourcePlayer, EntityType hitboxEntity, Location location) {
+        Corpse corpse = new Corpse(sourcePlayer, hitboxEntity, location);
 
         // Run Event
         CorpseCreateEvent event = new CorpseCreateEvent(corpse);
@@ -79,8 +80,15 @@ public class CorpseManager {
      * Spawn the corpse of a player
      * @return The corpse or null if unable to spawn (void)
      */
+    public static Corpse create(Player sourcePlayer, Location location) {
+        return create(sourcePlayer, EntityType.valueOf(An0mCorpses.config.getString("hitboxEntity").toUpperCase()), location);
+    }
+    /**
+     * Spawn the corpse of a player
+     * @return The corpse or null if unable to spawn (void)
+     */
     public static Corpse create(Player sourcePlayer) {
-        return create(sourcePlayer, EntityType.valueOf(An0mCorpses.config.getString("hitboxEntity").toUpperCase()));
+        return create(sourcePlayer, EntityType.valueOf(An0mCorpses.config.getString("hitboxEntity").toUpperCase()), sourcePlayer.getLocation());
     }
 
     /**
