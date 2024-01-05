@@ -6,7 +6,7 @@
 
     <groupId>dev.an0m</groupId>
     <artifactId>An0mCorpses</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
     <description>A simple lootable corpses plugin</description>
 
