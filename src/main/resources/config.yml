@@ -12,7 +12,7 @@ guiName: "{}&r's corpse"
 expSupport: true
 
 # Delete corpse if the inventory is empty
-removeIfEmpty: true
+removeIfEmpty: false
 
 # Don't spawn the corpse if it'll end up in fire or lava
 dontSpawnIn:
