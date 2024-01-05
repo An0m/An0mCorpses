@@ -4,7 +4,10 @@ import dev.an0m.an0mcorpse.An0mCorpse;
 import dev.an0m.an0mcorpse.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Turtle;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
@@ -32,6 +35,7 @@ public class Corpse extends Npc {
         super((CraftPlayer) sourcePlayer);
         this.sourcePlayer = sourcePlayer;
         this.ownerName = sourcePlayer.getName();
+
         // Create copy of player's inventory
         inventory = Bukkit.createInventory(npc.getBukkitEntity(), 9 * 5,
                 cc(An0mCorpse.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName())));
