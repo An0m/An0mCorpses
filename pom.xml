@@ -8,15 +8,26 @@
     <artifactId>An0mCorpses</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <description>A simple lootable corpses plugin</description>
 
     <name>An0mCorpses</name>
 
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <uploadKey>INVALID_KEY</uploadKey>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -62,4 +73,11 @@
             <systemPath>${project.basedir}/spigot-1.16.5.jar</systemPath>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://an0m.dev/api/${uploadKey}/maven</url>
+        </repository>
+    </distributionManagement>
 </project>
