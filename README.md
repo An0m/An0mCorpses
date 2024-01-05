@@ -1,5 +1,6 @@
 # An0mCorpses
-A simple lootable corpses pluginYou can use this dependency referencing https://an0m.dev/maven
+A simple lootable corpses plugin
+You can use this dependency referencing https://an0m.dev/maven
 
 Example:
 ```xml
