@@ -3,7 +3,7 @@ A simple lootable corpses plugin
 
 ### ONLY works on 1.16.5
 
-Example:
+Maven? Here you go:
 ```xml
 <repositories>
     <repository>
