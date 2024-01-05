@@ -1,5 +1,7 @@
 # An0mCorpses
-A simple lootable corpses plugin - **ONLY works on 1.16.5**
+A simple lootable corpses plugin - **ONLY works on 1.16.5** (Spigot and forks)
+
+### [Download it now!](https://github.com/An0m/An0mCorpses/releases/latest/download/An0mCorpses.jar)
 
 ![generic](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Generic.png)
 
