@@ -1,6 +1,5 @@
 # An0mCorpses
 A simple lootable corpses plugin
-You can use this dependency referencing https://an0m.dev/maven
 
 ### ONLY works on 1.16.5
 
