@@ -1,6 +1,6 @@
 name: An0mCorpses
 version: '${project.version}'
-main: dev.an0m.an0mcorpses.An0mCorpse
+main: dev.an0m.an0mcorpses.An0mCorpses
 api-version: '1.16'
 load: STARTUP
 website: an0m.dev
