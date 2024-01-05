@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static dev.an0m.an0mcorpse.Utils.cc;
+
 public class Corpse extends Npc {
 
     private final Player sourcePlayer;
@@ -32,7 +34,7 @@ public class Corpse extends Npc {
         this.ownerName = sourcePlayer.getName();
         // Create copy of player's inventory
         inventory = Bukkit.createInventory(npc.getBukkitEntity(), 9 * 5,
-                An0mCorpse.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName()));
+                cc(An0mCorpse.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName())));
         inventory.setStorageContents(sourcePlayer.getInventory().getStorageContents());
 
         // Add armor and offhand
