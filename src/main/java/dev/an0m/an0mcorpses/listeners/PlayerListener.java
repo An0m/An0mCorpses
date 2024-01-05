@@ -28,6 +28,7 @@ public class PlayerListener implements Listener {
         // Check if the entity is a corpse
         Corpse corpse = CorpseManager.getCorpse(e.getRightClicked());
         if (corpse == null) return;
+        //TODO: Fix item in hand being used when opening gui
 
         Player player = e.getPlayer();
         player.openInventory(corpse.getInventory());

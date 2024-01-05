@@ -54,6 +54,8 @@ public class Corpse extends Npc {
         hitbox.setPersistent(true); // Despawned when removing
         Utils.makeInvulnerable(hitbox);
         hitbox.setInvisible(true);
+
+        //TODO: Disable collision using scoreboard (can disable by config)
     }
 
     public Inventory getInventory() {
