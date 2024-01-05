@@ -1,7 +1,6 @@
 # An0mCorpses
-A simple lootable corpses plugin
-
-### ONLY works on 1.16.5
+A simple lootable corpses plugin.
+#### **ONLY works on 1.16.5**
 
 Maven? Here you go:
 ```xml
