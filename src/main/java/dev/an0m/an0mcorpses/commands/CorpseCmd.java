@@ -21,6 +21,7 @@ public class CorpseCmd implements CommandExecutor {
 
         Player target;
         switch (args[0]) {
+            case "create":
             case "spawn":
                 target = runSimpleTargetCmd(args, "corpse spawn", sender);
                 if (target != null) {
