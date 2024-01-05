@@ -1,10 +1,10 @@
-package dev.an0m.an0mcorpse.corpse;
+package dev.an0m.an0mcorpses.corpse;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
-import dev.an0m.an0mcorpse.An0mCorpse;
-import dev.an0m.an0mcorpse.Utils;
+import dev.an0m.an0mcorpses.An0mCorpses;
+import dev.an0m.an0mcorpses.Utils;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -109,7 +109,7 @@ public class Npc {
             hideNpcNametag(craftPlayer);
 
             // Remove from tab
-            Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(An0mCorpse.getInstance(), () ->
+            Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(An0mCorpses.getInstance(), () ->
                 connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc)),
             10L);
         }

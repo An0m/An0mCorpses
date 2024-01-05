@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.an0m</groupId>
-    <artifactId>An0mCorpse</artifactId>
+    <artifactId>An0mCorpses</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>An0mCorpse</name>
+    <name>An0mCorpses</name>
 
     <properties>
         <java.version>11</java.version>
@@ -51,21 +51,6 @@
             </resource>
         </resources>
     </build>
-
-    <repositories>
-        <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>papermc</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>

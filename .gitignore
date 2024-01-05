@@ -1,9 +1,9 @@
 # User-specific stuff
 .idea/
-.paper-nms
 *.iml
 *.ipr
 *.iws
+spigot-1.16.5.jar
 
 # IntelliJ
 out/

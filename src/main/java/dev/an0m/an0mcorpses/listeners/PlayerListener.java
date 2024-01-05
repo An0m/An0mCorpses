@@ -1,7 +1,7 @@
-package dev.an0m.an0mcorpse.listeners;
+package dev.an0m.an0mcorpses.listeners;
 
-import dev.an0m.an0mcorpse.corpse.Corpse;
-import dev.an0m.an0mcorpse.corpse.CorpseManager;
+import dev.an0m.an0mcorpses.corpse.Corpse;
+import dev.an0m.an0mcorpses.corpse.CorpseManager;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

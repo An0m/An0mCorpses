@@ -1,4 +1,4 @@
-package dev.an0m.an0mcorpse;
+package dev.an0m.an0mcorpses;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_16_R3.EntityLiving;

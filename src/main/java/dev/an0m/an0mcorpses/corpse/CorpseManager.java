@@ -1,6 +1,6 @@
-package dev.an0m.an0mcorpse.corpse;
+package dev.an0m.an0mcorpses.corpse;
 
-import dev.an0m.an0mcorpse.An0mCorpse;
+import dev.an0m.an0mcorpses.An0mCorpses;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
@@ -62,7 +62,7 @@ public class CorpseManager {
      * @return The corpse or null if unable to spawn (void)
      */
     public static Corpse create(Player sourcePlayer) {
-        return create(sourcePlayer, EntityType.valueOf(An0mCorpse.config.getString("hitboxEntity").toUpperCase()));
+        return create(sourcePlayer, EntityType.valueOf(An0mCorpses.config.getString("hitboxEntity").toUpperCase()));
     }
 
     /**

@@ -1,7 +1,7 @@
-package dev.an0m.an0mcorpse.corpse;
+package dev.an0m.an0mcorpses.corpse;
 
-import dev.an0m.an0mcorpse.An0mCorpse;
-import dev.an0m.an0mcorpse.Utils;
+import dev.an0m.an0mcorpses.An0mCorpses;
+import dev.an0m.an0mcorpses.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static dev.an0m.an0mcorpse.Utils.cc;
+import static dev.an0m.an0mcorpses.Utils.cc;
 
 public class Corpse extends Npc {
 
@@ -38,7 +38,7 @@ public class Corpse extends Npc {
 
         // Create copy of player's inventory
         inventory = Bukkit.createInventory(npc.getBukkitEntity(), 9 * 5,
-                cc(An0mCorpse.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName())));
+                cc(An0mCorpses.config.getString("guiName").replace("{}", sourcePlayer.getDisplayName())));
         inventory.setStorageContents(sourcePlayer.getInventory().getStorageContents());
 
         // Add armor and offhand
@@ -63,10 +63,10 @@ public class Corpse extends Npc {
     }
 
     public BukkitTask scheduleRemoval(long ticks) {
-        return Bukkit.getServer().getScheduler().runTaskLater(An0mCorpse.getInstance(), () -> CorpseManager.remove(getId()), ticks);
+        return Bukkit.getServer().getScheduler().runTaskLater(An0mCorpses.getInstance(), () -> CorpseManager.remove(getId()), ticks);
     }
     public BukkitTask scheduleRemoval() {
-        return scheduleRemoval(An0mCorpse.config.getInt("corpseRemovalTimeout"));
+        return scheduleRemoval(An0mCorpses.config.getInt("corpseRemovalTimeout"));
     }
 
     public Player getSourcePlayer() {

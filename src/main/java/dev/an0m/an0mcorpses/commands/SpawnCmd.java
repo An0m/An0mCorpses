@@ -1,13 +1,13 @@
-package dev.an0m.an0mcorpse.commands;
+package dev.an0m.an0mcorpses.commands;
 
-import dev.an0m.an0mcorpse.corpse.CorpseManager;
+import dev.an0m.an0mcorpses.corpse.CorpseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static dev.an0m.an0mcorpse.Utils.sendMessage;
+import static dev.an0m.an0mcorpses.Utils.sendMessage;
 
 public class SpawnCmd implements CommandExecutor {
 
