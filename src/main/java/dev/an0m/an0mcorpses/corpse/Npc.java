@@ -32,9 +32,9 @@ public class Npc {
 
         // Get ground position
         Location loc = sourcePlayer.getLocation().clone();
-        BoundingBox bb; Block block = loc.getBlock();
+        BoundingBox bb; Block block;
         for (;;) {
-            if (loc.getY() < -64 || block.getType() == Material.LAVA) {
+            if (loc.getY() < -64 || (block = loc.getBlock()).getType() == Material.LAVA) {
                 npc = null; return;
             }
             if (block.isPassable() || (bb = block.getBoundingBox()).getWidthX() < .5 || bb.getWidthZ() < .5)
