@@ -150,7 +150,7 @@ public class Npc {
     }
     /**
      * Removes the npc for certain players (temporarily).
-     * Does NOT remove the corpse, which will be spawned back on next tick.
+     * Does NOT remove the corpse
      * Refer to CorpseManger.remove() for permanent removal
      */
     public void despawn() {
