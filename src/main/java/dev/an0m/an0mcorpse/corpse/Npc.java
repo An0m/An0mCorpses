@@ -4,10 +4,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import dev.an0m.an0mcorpse.An0mCorpse;
+import dev.an0m.an0mcorpse.Utils;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -24,41 +25,49 @@ import java.util.stream.Collectors;
 
 public class Npc {
     public final EntityPlayer npc;
+    private Location location = null;
 
     protected Npc(CraftPlayer sourcePlayer) {
         EntityPlayer playerHandle = sourcePlayer.getHandle();
 
         // Get ground position
-        Location location = sourcePlayer.getLocation().clone();
-        BoundingBox bb; Block block;
-        while (location.getY() > -64 && ((block = location.getBlock()).isPassable() || (bb = block.getBoundingBox()).getWidthX() < .5 || bb.getWidthZ() < .5))
-            location.subtract(0, 1, 0);
-        location.setY(location.getBlock().getBoundingBox().getMaxY() - 0.15); // Position the body ON the ground. Not partially underground
+        Location loc = sourcePlayer.getLocation().clone();
+        BoundingBox bb; Block block = loc.getBlock();
+        for (;;) {
+            if (loc.getY() < -64 || block.getType() == Material.LAVA) {
+                npc = null; return;
+            }
+            if (block.isPassable() || (bb = block.getBoundingBox()).getWidthX() < .5 || bb.getWidthZ() < .5)
+                loc.subtract(0, 1, 0);
+            else break;
+        }
+        loc.setY(loc.getBlock().getBoundingBox().getMaxY() + .125); // Position the body ON the ground. Not partially underground
+        this.location = loc.clone();
+        loc.add(1, 0, 0);
 
         // Create the npc profile
         UUID uuid = UUID.randomUUID();
         GameProfile npcProfile = new GameProfile(uuid, uuid.toString().replace("-", "").substring(0, 16)); // Random name (16 chars is the max name length)
         MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
+        WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
         npc = new EntityPlayer(minecraftServer, worldServer, npcProfile, new PlayerInteractManager(worldServer));
 
-        npc.setPose(EntityPose.SWIMMING);
+        npc.setPose(EntityPose.SLEEPING);
         npc.setCustomNameVisible(false);
-        npc.setPosition(location.getX(), location.getY(), location.getZ());
+        npc.setPosition(loc.getX(), loc.getY(), loc.getZ());
         npc.setArrowCount(sourcePlayer.getArrowsInBody());
 
-        // Make invulnerable (somehow EntityPlayer#setInvulnerable doesn't work?)
-        npc.maxNoDamageTicks = Integer.MAX_VALUE; // Almost 7 years
-        npc.noDamageTicks = Integer.MAX_VALUE;
+        // Make invulnerable (somehow EntityPlayer#makeInvulnerable doesn't work?)
+        Utils.makeInvulnerable(npc);
 
         // Inventory
-        for (int i = 0; i < playerHandle.inventory.items.size(); i++)
-            npc.inventory.items.set(i, playerHandle.inventory.items.get(i).cloneItemStack());
+        //for (int i = 0; i < playerHandle.inventory.items.size(); i++)
+        //    npc.inventory.items.set(i, playerHandle.inventory.items.get(i).cloneItemStack()); // Useless (except main item)
+        //npc.inventory.itemInHandIndex = sourcePlayer.getInventory().getHeldItemSlot();
+
+        // Armor
         for (int i = 0; i < playerHandle.inventory.armor.size(); i++)
             npc.inventory.armor.set(i, playerHandle.inventory.armor.get(i).cloneItemStack());
-        for (int i = 0; i < playerHandle.inventory.extraSlots.size(); i++)
-            npc.inventory.extraSlots.set(i, playerHandle.inventory.extraSlots.get(i).cloneItemStack());
-        npc.inventory.itemInHandIndex = sourcePlayer.getInventory().getHeldItemSlot();
 
         // Skin and main hand
         DataWatcher dataWatcher = npc.getDataWatcher();
@@ -71,10 +80,9 @@ public class Npc {
             npcProfile.getProperties().put("textures", new Property("textures", textures.getValue(), textures.getSignature()));
         } catch (NoSuchElementException ignored) {} // No skin
 
-        // Add to the world (no clue if it's needed or not)
+        // Add to the world
         new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), npc);
-        WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
-        world.addEntity(npc, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        worldServer.addEntity(npc, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public void spawn(Collection<Player> targets) {
@@ -86,10 +94,10 @@ public class Npc {
             connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
             connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
 
-            // Inventory
+            // Armor
             connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getId(), Arrays.asList(
-                    new Pair<>(EnumItemSlot.MAINHAND, npc.getItemInMainHand()),
-                    new Pair<>(EnumItemSlot.OFFHAND, npc.getItemInOffHand()),
+                    //new Pair<>(EnumItemSlot.MAINHAND, npc.getItemInMainHand()),
+                    //new Pair<>(EnumItemSlot.OFFHAND, npc.getItemInOffHand()),
                     new Pair<>(EnumItemSlot.HEAD, npc.getEquipment(EnumItemSlot.HEAD)),
                     new Pair<>(EnumItemSlot.CHEST, npc.getEquipment(EnumItemSlot.CHEST)),
                     new Pair<>(EnumItemSlot.LEGS, npc.getEquipment(EnumItemSlot.LEGS)),
@@ -100,7 +108,7 @@ public class Npc {
             connection.sendPacket(new PacketPlayOutEntityMetadata(npc.getId(), npc.getDataWatcher(), true));
             hideNpcNametag(craftPlayer);
 
-            // Remove from tablist
+            // Remove from tab
             Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(An0mCorpse.getInstance(), () ->
                 connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc)),
             10L);
@@ -129,7 +137,10 @@ public class Npc {
         connection.sendPacket(new PacketPlayOutScoreboardTeam(team, Collections.singletonList(name), 3));
     }
 
-    public void remove(Collection<Player> targets) {
+    /**
+     * Removes the npc for certain players (temporarily)
+     */
+    public void despawn(Collection<Player> targets) {
         for (Player target : targets) {
             try {
                 PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
@@ -137,12 +148,20 @@ public class Npc {
             } catch (Exception ignored) {}
         }
     }
-    public void remove() {
-        remove(getNearbyPlayers());
+    /**
+     * Removes the npc for certain players (temporarily).
+     * Does NOT remove the corpse, which will be spawned back on next tick.
+     * Refer to CorpseManger.remove() for permanent removal
+     */
+    public void despawn() {
+        despawn(getNearbyPlayers());
     }
 
     public Set<Player> getNearbyPlayers() {
         return npc.getBukkitEntity().getNearbyEntities(45, 45, 45).stream().filter(e -> e instanceof Player).map(p -> (Player) p).collect(Collectors.toSet());
     }
 
+    public Location getLocation() {
+        return location;
+    }
 }

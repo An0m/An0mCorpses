@@ -25,7 +25,7 @@ public class SpawnCmd implements CommandExecutor {
             target = (Player) sender;
         else return false;
 
-        CorpseManager.create(target).scheduleRemoval(3 * 60 * 20);
+        CorpseManager.create(target).scheduleRemoval();
         sendMessage(sender, "&aDone!");
         return false;
     }

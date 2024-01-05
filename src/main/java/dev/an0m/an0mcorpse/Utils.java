@@ -1,7 +1,10 @@
 package dev.an0m.an0mcorpse;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_16_R3.EntityLiving;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
+import org.bukkit.entity.LivingEntity;
 
 public class Utils {
     public static String cc(String message) {
@@ -12,4 +15,15 @@ public class Utils {
         if (message != null && !message.isEmpty())
             target.sendMessage(cc(message));
     }
+
+    public static void makeInvulnerable(EntityLiving entity) {
+        entity.maxNoDamageTicks = entity.noDamageTicks = Integer.MAX_VALUE; // Almost 7 years
+    }
+    public static void makeInvulnerable(CraftLivingEntity entity) {
+        makeInvulnerable(entity.getHandle());
+    }
+    public static void makeInvulnerable(LivingEntity entity) {
+        makeInvulnerable((CraftLivingEntity) entity);
+    }
+
 }
