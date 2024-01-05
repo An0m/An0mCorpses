@@ -1,4 +1,5 @@
 # Timeout for a corpse to despawn
+# Set to -1 to disable (strongly despised as corpses load chunks)
 corpseRemovalTimeout: 3600 # Ticks
 
 # Entity used for corpse hitbox

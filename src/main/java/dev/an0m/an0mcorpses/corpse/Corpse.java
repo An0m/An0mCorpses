@@ -68,8 +68,14 @@ public class Corpse extends Npc {
     public BukkitTask scheduleRemoval(long ticks) {
         return Bukkit.getServer().getScheduler().runTaskLater(An0mCorpses.getInstance(), () -> CorpseManager.remove(getId()), ticks);
     }
+    /**
+     * Schedules the removal of a corpse using the default timeout set in the config
+     * Can be null if the timeout set is negative
+     * */
     public BukkitTask scheduleRemoval() {
-        return scheduleRemoval(An0mCorpses.config.getInt("corpseRemovalTimeout"));
+        int timeout = An0mCorpses.config.getInt("corpseRemovalTimeout");
+        if (timeout < 0) return null;
+        return scheduleRemoval(timeout);
     }
 
     public Player getSourcePlayer() {
