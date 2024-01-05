@@ -38,6 +38,9 @@ public class CorpseManager {
         new ArrayList<>(corpse.getInventory().getViewers()).forEach(HumanEntity::closeInventory); // This MUST be after corpses.remove, or else it will crash the server
         return true;
     }
+    public static boolean remove(Corpse corpse) {
+        return remove(corpse.getId());
+    }
 
     /**
      * Spawn the corpse of a player

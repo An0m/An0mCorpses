@@ -10,13 +10,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Corpse extends Npc {
 
     private final Player sourcePlayer;
     private final String ownerName;
-    public final HashSet<Player> shownToPlayers = new HashSet<>();
+    protected final Set<Player> shownToPlayers = new HashSet<>();
     private final Inventory inventory;
     private final LivingEntity hitbox;
 
@@ -80,6 +83,34 @@ public class Corpse extends Npc {
 
     public LivingEntity getHitbox() {
         return hitbox;
+    }
+
+    /** @return If at least one change from the list of players that could see the corpse has been made */
+    public boolean hideFrom(Collection<Player> players) {
+        if (!shownToPlayers.removeAll(players)) return false;
+
+        despawn(players);
+        return true;
+    }
+    /** @return If the player can NO LONGER see the corpse */
+    public boolean hideFrom(Player player) {
+        return hideFrom(Collections.singleton(player));
+    }
+
+    /** @return If at least one change from the list of players that could see the corpse has been made */
+    public boolean showTo(Collection<Player> players) {
+        if (!shownToPlayers.addAll(players)) return false;
+
+        despawn(players);
+        return true;
+    }
+    /** @return If the player can NO LONGER see the corpse */
+    public boolean showTo(Player player) {
+        return showTo(Collections.singleton(player));
+    }
+
+    public Set<Player> getShownTo() {
+        return shownToPlayers;
     }
 
 }

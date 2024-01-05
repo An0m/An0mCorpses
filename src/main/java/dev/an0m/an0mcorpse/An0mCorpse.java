@@ -1,8 +1,10 @@
 package dev.an0m.an0mcorpse;
 
 import dev.an0m.an0mcorpse.commands.SpawnCmd;
+import dev.an0m.an0mcorpse.corpse.Corpse;
 import dev.an0m.an0mcorpse.corpse.CorpseManager;
 import dev.an0m.an0mcorpse.listeners.PlayerListener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class An0mCorpse extends JavaPlugin {
@@ -17,10 +19,6 @@ public final class An0mCorpse extends JavaPlugin {
 
         // Add and remove the corpses for the nearby players (run every tick)
         getServer().getScheduler().scheduleSyncRepeatingTask(this, CorpseManager::updateCorpseShowPlayers, 0, 1L);
-    }
-
-    @Override
-    public void onDisable() {
     }
 
     public static An0mCorpse getInstance() {
