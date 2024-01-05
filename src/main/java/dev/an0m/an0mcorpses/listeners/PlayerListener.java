@@ -22,12 +22,13 @@ import java.util.Optional;
 
 public class PlayerListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onClick(PlayerInteractEntityEvent e) {
         if (e.getHand() == EquipmentSlot.OFF_HAND) return;
         // Check if the entity is a corpse
         Corpse corpse = CorpseManager.getCorpse(e.getRightClicked());
         if (corpse == null) return;
+        e.setCancelled(true);
         //TODO: Fix item in hand being used when opening gui
 
         Player player = e.getPlayer();
