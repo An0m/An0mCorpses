@@ -35,7 +35,7 @@ public class CorpseCmd implements CommandExecutor {
                 target = runSimpleTargetCmd(args, "corpse remove", sender);
                 if (target != null) {
                     int count = 0;
-                    for (Corpse corpse : CorpseManager.getCorpses()) {
+                    for (Corpse corpse : new ArrayList<>(CorpseManager.getCorpses())) {
                         if (corpse.getSourcePlayer() != target) continue;
                         count++;
                         CorpseManager.remove(corpse);
