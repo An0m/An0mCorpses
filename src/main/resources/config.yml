@@ -6,3 +6,9 @@ hitboxEntity: turtle
 
 # The name of the corpses inventory
 guiName: "{}&r's corpse"
+
+# Store dropped exp in corpse (give to first opener)
+expSupport: true
+
+# Delete corpse if the inventory is empty
+removeIfEmpty: true

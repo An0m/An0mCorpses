@@ -1,5 +1,6 @@
 package dev.an0m.an0mcorpses.listeners;
 
+import dev.an0m.an0mcorpses.An0mCorpses;
 import dev.an0m.an0mcorpses.corpse.Corpse;
 import dev.an0m.an0mcorpses.corpse.CorpseManager;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -34,7 +35,7 @@ public class PlayerListener implements Listener {
         if (corpse == null) return;
 
         e.getDrops().clear();
-        corpse.holdExp(e.getDroppedExp());
+        if (An0mCorpses.config.getBoolean("expSupport")) corpse.holdExp(e.getDroppedExp());
         corpse.scheduleRemoval();
     }
 
@@ -43,7 +44,8 @@ public class PlayerListener implements Listener {
         Optional<Corpse> corpse = CorpseManager.getCorpses().stream().filter(c -> c.npc.getBukkitEntity() == e.getInventory().getHolder()).findFirst();
         if (corpse.isEmpty()) return;
 
-        ((CraftPlayer) e.getPlayer()).giveExp(corpse.get().withdrawExp());
+        if (An0mCorpses.config.getBoolean("expSupport"))
+            ((CraftPlayer) e.getPlayer()).giveExp(corpse.get().withdrawExp());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -54,7 +56,8 @@ public class PlayerListener implements Listener {
         Optional<Corpse> corpse = CorpseManager.getCorpses().stream().filter(c -> c.npc.getBukkitEntity() == e.getInventory().getHolder()).findFirst();
         if (corpse.isEmpty()) return;
 
-        CorpseManager.remove(corpse.get().getId());
+        if (An0mCorpses.config.getBoolean("removeIfEmpty"))
+            CorpseManager.remove(corpse.get().getId());
     }
 
 }
