@@ -5,16 +5,23 @@ A simple lootable corpses plugin - **ONLY works on 1.16.5**
 
 ## Features:
  - Estensive events and API
- - Support for different block heights (Esibits [A](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Height.png) & [B](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Height2.png))
- - Always place on solid blocks (min 0.5 x 0.5 non passable blocks)
- - Keep player death drops in the corpse inventory (open on click)
- - *Auto removal
+ - Support for different block heights (Exibits [A](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Height.png) & [B](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Height2.png))
+ - Always place on solid blocks (min 0.5 x 0.5 non passable blocks) - Aka: fix spawning INSIDE [doors](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Generic.png), trapdoors, ecc.
+ - Keep player death drops in the corpse [inventory](https://raw.githubusercontent.com/An0m/An0mCorpses/main/images/Generic.png) (open on click)
+ - *Automatic corpses removal (scheduled)
  - *Hold player exp (given to the first opener)
  - *Don't spawn corpse in fire or lava
  - *Remove corpse when their inventory is emptied
+   
 *Editable or toggleable in config
 
-Or you can just check the (config)[https://github.com/An0m/An0mCorpses/blob/main/src/main/resources/config.yml] for yourself!
+---
+
+Or you can just check the [config](https://github.com/An0m/An0mCorpses/blob/main/src/main/resources/config.yml) for yourself!
+
+Note: the corpses keeps the chunk loaded
+
+---
 
 ## Maven? Here you go!
 ```xml
