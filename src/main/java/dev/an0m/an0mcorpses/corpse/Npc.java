@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class Npc {
     public final EntityPlayer npc;
     private Location location = null;
+    private int renderDistance;
 
     protected Npc(CraftPlayer sourcePlayer, Location sourceLocation) {
         EntityPlayer playerHandle = sourcePlayer.getHandle();
@@ -45,6 +47,7 @@ public class Npc {
         }
         loc.setY(loc.getBlock().getBoundingBox().getMaxY() + .125); // Position the body ON the ground. Not partially underground
         this.location = loc.clone();
+        this.renderDistance = getRenderDistance();
         loc.add(1, 0, 0);
 
         // Create the npc profile
@@ -85,6 +88,15 @@ public class Npc {
         // Add to the world
         new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), npc);
         worldServer.addEntity(npc, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    /** Get world specific player entity render distance */
+    private int getRenderDistance() {
+        ConfigurationSection settings = Bukkit.getServer().spigot().getConfig().getConfigurationSection("world-settings");
+        ConfigurationSection worldSettings = settings.getConfigurationSection(getLocation().getWorld().getName());
+
+        return (worldSettings == null ? settings.getConfigurationSection("default") : worldSettings)
+                .getInt("entity-tracking-range.players") +3; // Just to make sure
     }
 
     public void spawn(Collection<Player> targets) {
@@ -160,7 +172,8 @@ public class Npc {
     }
 
     public Set<Player> getNearbyPlayers() {
-        return npc.getBukkitEntity().getNearbyEntities(45, 45, 45).stream().filter(e -> e instanceof Player).map(p -> (Player) p).collect(Collectors.toSet());
+        return npc.getBukkitEntity().getNearbyEntities(renderDistance, renderDistance, renderDistance)
+                .stream().filter(e -> e instanceof Player).map(p -> (Player) p).collect(Collectors.toSet());
     }
 
     public Location getLocation() {
