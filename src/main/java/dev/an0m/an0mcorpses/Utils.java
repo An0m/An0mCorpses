@@ -1,10 +1,10 @@
 package dev.an0m.an0mcorpses;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_16_R3.EntityLiving;
+import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -21,7 +21,9 @@ public class Utils {
     }
 
     public static void makeInvulnerable(EntityLiving entity) {
-        entity.maxNoDamageTicks = entity.noDamageTicks = Integer.MAX_VALUE; // Almost 7 years
+        entity.aU = entity.W = Integer.MAX_VALUE; // Almost 7 years
+        //entity.aU = entity.maxNoDamageTicks
+        //entity.W = entity.noDamageTicks
     }
     public static void makeInvulnerable(CraftLivingEntity entity) {
         makeInvulnerable(entity.getHandle());

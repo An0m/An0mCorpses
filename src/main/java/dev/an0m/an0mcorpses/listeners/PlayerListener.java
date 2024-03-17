@@ -7,7 +7,7 @@ import dev.an0m.an0mcorpses.events.CorpseCloseInventoryEvent;
 import dev.an0m.an0mcorpses.events.CorpseGenerateEvent;
 import dev.an0m.an0mcorpses.events.CorpseOpenInventoryEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

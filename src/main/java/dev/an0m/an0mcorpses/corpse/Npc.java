@@ -5,17 +5,31 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import dev.an0m.an0mcorpses.An0mCorpses;
 import dev.an0m.an0mcorpses.Utils;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.protocol.EnumProtocolDirection;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.DataWatcher;
+import net.minecraft.network.syncher.DataWatcherRegistry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.EntityPose;
+import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.EnumMainHand;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.ScoreboardTeam;
+import net.minecraft.world.scores.ScoreboardTeamBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.scoreboard.CraftScoreboard;
-import org.bukkit.craftbukkit.v1_16_R3.scoreboard.CraftScoreboardManager;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.scoreboard.CraftScoreboard;
+import org.bukkit.craftbukkit.v1_17_R1.scoreboard.CraftScoreboardManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.BoundingBox;
@@ -55,9 +69,9 @@ public class Npc {
         GameProfile npcProfile = new GameProfile(uuid, uuid.toString().replace("-", "").substring(0, 16)); // Random name (16 chars is the max name length)
         MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
-        npc = new EntityPlayer(minecraftServer, worldServer, npcProfile, new PlayerInteractManager(worldServer));
+        npc = new EntityPlayer(minecraftServer, worldServer, npcProfile);
 
-        npc.setPose(EntityPose.SLEEPING);
+        npc.setPose(EntityPose.e);
         npc.setCustomNameVisible(false);
         npc.setPosition(loc.getX(), loc.getY(), loc.getZ());
         npc.setArrowCount(sourcePlayer.getArrowsInBody());
@@ -71,13 +85,13 @@ public class Npc {
         //npc.inventory.itemInHandIndex = sourcePlayer.getInventory().getHeldItemSlot();
 
         // Armor
-        for (int i = 0; i < playerHandle.inventory.armor.size(); i++)
-            npc.inventory.armor.set(i, playerHandle.inventory.armor.get(i).cloneItemStack());
+        for (int i = 0; i < playerHandle.getInventory().getArmorContents().size(); i++)
+            npc.getInventory().getArmorContents().set(i, playerHandle.getInventory().getArmorContents().get(i).cloneItemStack());
 
         // Skin and main hand
         DataWatcher dataWatcher = npc.getDataWatcher();
         dataWatcher.set(DataWatcherRegistry.a.a(16), (byte)127); // Enable all skin layers
-        dataWatcher.set(DataWatcherRegistry.a.a(17), (byte) (npc.getMainHand() == EnumMainHand.LEFT ? 0 : 1)); // Change main hand (https://wiki.vg/Protocol#:~:text=the%20Statistics%20menu.-,Client%20Information)
+        dataWatcher.set(DataWatcherRegistry.a.a(17), (byte) (npc.getMainHand() == EnumMainHand.a ? 0 : 1)); // Change main hand (https://wiki.vg/Protocol#:~:text=the%20Statistics%20menu.-,Client%20Information)
 
         // Skin
         try {
@@ -86,7 +100,7 @@ public class Npc {
         } catch (NoSuchElementException ignored) {} // No skin
 
         // Add to the world
-        new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), npc);
+        new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.b), npc); // CLIENTBOUND
         worldServer.addEntity(npc, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
@@ -102,20 +116,20 @@ public class Npc {
     public void spawn(Collection<Player> targets) {
         for (Player target : targets) {
             CraftPlayer craftPlayer = (CraftPlayer) target;
-            PlayerConnection connection = craftPlayer.getHandle().playerConnection;
+            PlayerConnection connection = craftPlayer.getHandle().b; // PlayerConnection
 
             // Add entity
-            connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc));
+            connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.a, npc)); // ADD_PLAYER
             connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
 
             // Armor
             connection.sendPacket(new PacketPlayOutEntityEquipment(npc.getId(), Arrays.asList(
                     //new Pair<>(EnumItemSlot.MAINHAND, npc.getItemInMainHand()),
                     //new Pair<>(EnumItemSlot.OFFHAND, npc.getItemInOffHand()),
-                    new Pair<>(EnumItemSlot.HEAD, npc.getEquipment(EnumItemSlot.HEAD)),
-                    new Pair<>(EnumItemSlot.CHEST, npc.getEquipment(EnumItemSlot.CHEST)),
-                    new Pair<>(EnumItemSlot.LEGS, npc.getEquipment(EnumItemSlot.LEGS)),
-                    new Pair<>(EnumItemSlot.FEET, npc.getEquipment(EnumItemSlot.FEET))
+                    new Pair<>(EnumItemSlot.f, npc.getEquipment(EnumItemSlot.f)), // Head
+                    new Pair<>(EnumItemSlot.e, npc.getEquipment(EnumItemSlot.e)), // Chest
+                    new Pair<>(EnumItemSlot.d, npc.getEquipment(EnumItemSlot.d)), // Legs
+                    new Pair<>(EnumItemSlot.c, npc.getEquipment(EnumItemSlot.c))  // Feet
             )));
 
             // Send info like the skin layers, the pose (not sure?) and the main hand
@@ -124,7 +138,7 @@ public class Npc {
 
             // Remove from tab
             Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(An0mCorpses.getInstance(), () ->
-                connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc)),
+                connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.e, npc)), // REMOVE_PLAYER
             10L);
         }
     }
@@ -142,13 +156,19 @@ public class Npc {
         ScoreboardTeam team = scoreboard.getTeam(name);
         if (team == null) team = new ScoreboardTeam(scoreboard, name);
 
-        team.setNameTagVisibility(ScoreboardTeamBase.EnumNameTagVisibility.NEVER);
-        team.setCollisionRule(ScoreboardTeamBase.EnumTeamPush.NEVER);
+        team.setNameTagVisibility(ScoreboardTeamBase.EnumNameTagVisibility.b); // Never
+        team.setCollisionRule(ScoreboardTeamBase.EnumTeamPush.b); // Never
 
-        PlayerConnection connection = player.getHandle().playerConnection;
-        connection.sendPacket(new PacketPlayOutScoreboardTeam(team, 1));
-        connection.sendPacket(new PacketPlayOutScoreboardTeam(team, 0));
-        connection.sendPacket(new PacketPlayOutScoreboardTeam(team, Collections.singletonList(name), 3));
+        PlayerConnection connection = player.getHandle().b; // PlayerConnection
+        // connection.sendPacket(new PacketPlayOutScoreboardTeam(team, 1));
+        // connection.sendPacket(new PacketPlayOutScoreboardTeam(team, 0));
+        // connection.sendPacket(new PacketPlayOutScoreboardTeam(team, Collections.singletonList(name), 3));
+
+        // When I wrote this, only me and God knew what this did
+        // Now not even He knows
+        connection.sendPacket(PacketPlayOutScoreboardTeam.a(team));
+        connection.sendPacket(PacketPlayOutScoreboardTeam.a(team, true));
+        connection.sendPacket(PacketPlayOutScoreboardTeam.a(team, name, PacketPlayOutScoreboardTeam.a.a));
     }
 
     /**
@@ -157,7 +177,7 @@ public class Npc {
     public void despawn(Collection<Player> targets) {
         for (Player target : targets) {
             try {
-                PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
+                PlayerConnection connection = ((CraftPlayer) target).getHandle().b; // PlayerConnection
                 connection.sendPacket(new PacketPlayOutEntityDestroy(npc.getId()));
             } catch (Exception ignored) {}
         }
